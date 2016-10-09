@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      @user.send_login_link
       redirect_to root_path, notice: 'Welcome! We have sent you the link to login to our app'
     else
       render :register

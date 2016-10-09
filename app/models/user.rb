@@ -23,10 +23,22 @@ class User < ApplicationRecord
     "http://localhost:3000/auth?#{self.login_token}"
   end
 
+  def login_token_expired?
+    (self.token_generated_at + token_validity) > Time.now.utc
+  end
+
+  def expire_token!
+    self.login_token = nil
+    save!
+  end
+
   private
 
   def generate_token
     SecureRandom.hex(10)
   end
 
+  def token_validity
+    2.hours
+  end
 end
